@@ -1,7 +1,10 @@
 const express = require('express');
+var cors = require('cors');
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http, { origins: '*:*'});
+const io = require('socket.io')(http);
+
+app.use(cors());
 
 app.get('/', function(req, res) {
   res.render('index.ejs');

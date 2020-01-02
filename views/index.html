@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Node Chat</title>
+  </head>
+  <link rel="stylesheet" type="text/css" href="css/index.css" >
+  <!--<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font: 13px Helvetica, Arial; }
+    form { background: #fff; padding: 3px; position: fixed; bottom: 0; width: 100%; border-color: #000; border-top-style: solid; border-top-width: 1px;}
+    form input { border-style: solid; border-width: 1px; padding: 10px; width: 85%; margin-right: .5%; }
+    form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; margin-left: 2%; }
+    #messages { list-style-type: none; margin: 0; padding: 0; }
+    #messages li { padding: 5px 10px; }
+    #messages li:nth-child(odd) { background: #eee; }
+    #notifications li:nth-child(odd) { background-color: #C4C4C4;}
+    #notifications li:nth-child(even) { background-color: #F1EFEF;}-->
+</style>
+</head>
+<body>
+  <div id="content">
+    <div id="notifications">
+      <ul>
+        <li>Alex T. has joined</li>
+        <li>John D. has joined</li>
+      </ul>
+    </div>
+    <div id="messages">
+      <div class="outgoing-message-container message-container">
+        <p class="username">Alex T.</p>
+        <div class="outgoing-bubble bubble">
+          This is my outgoing message
+        </div>
+      </div>
+      <div class="incoming-message-container message-container">
+        <p class="username">John D.</p>
+        <div class="incoming-bubble bubble">
+          This is my incoming message
+        </div>
+      </div>
+      <div class="incoming-message-container message-container">
+        <p class="username">John D.</p>
+        <div class="incoming-bubble bubble">
+          This is my incoming message
+        </div>
+      </div>
+      <div class="incoming-message-container message-container">
+        <p class="username">John D.</p>
+        <div class="incoming-bubble bubble">
+          This is my incoming message
+        </div>
+      </div>
+      <div class="outgoing-message-container message-container">
+        <p class="username">Alex T.</p>
+        <div class="outgoing-bubble bubble">
+          This is my outgoing message
+        </div>
+      </div>
+      <div class="outgoing-message-container message-container">
+        <p class="username">Alex T.</p>
+        <div class="outgoing-bubble bubble">
+          This is my outgoing message
+        </div>
+      </div>
+      <div class="incoming-message-container message-container">
+        <p class="username">John D.</p>
+        <div class="incoming-bubble bubble">
+          This is my incoming message
+        </div>
+      </div>
+      <div class="outgoing-message-container message-container">
+        <p class="username">Alex T.</p>
+        <div class="outgoing-bubble bubble">
+          This is my outgoing message
+        </div>
+      </div>
+      <div class="outgoing-message-container message-container">
+        <p class="username">Alex T.</p>
+        <div class="outgoing-bubble bubble">
+          This is my outgoing message
+        </div>
+      </div>  
+    </div>
+    <div id="send-message-wrapper">
+      <!--<div id="is-typing-bar">
+        Alex T. is typing . . .
+      </div>-->
+      <div id="send-message-container">
+        <form action="/" method="POST" id="chat-form">
+          <input type="text" id="send-message-box">
+          <button id="send-btn">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--<form action="/" method="POST" id="chatForm">
+    <input id="txt" autocomplete="off" autofocus="on" placeholder="type your message here..." /><button>Send</button>
+  </form>-->
+  <script src="../../socket.io/socket.io.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+  <script>
+    $(function() {
+      $(".incoming-message-container").next(".incoming-message-container") ? $(".incoming-message-container").next(".incoming-message-container").find(".username").hide() : $(".incoming-message-container").next(".incoming-message-container").show();
+      $(".outgoing-message-container").next(".outgoing-message-container") ? $(".outgoing-message-container").next(".outgoing-message-container").find(".username").hide() : $(".outgoing-message-container").next(".outgoing-message-container").show();
+    });
+
+    var socket = io.connect('http://localhost:8080');
+
+    var username = prompt('Type in your username for this session: ');
+    socket.emit('username', username);
+
+    $('#chat-form').submit(function(e) {
+      e.preventDefault();
+      var msg = $('#send-message-box');   
+      socket.emit('chat_message', msg.val());
+      msg.val('');
+      return false;
+    });  
+ 
+    socket.on('chat_message', function(msg) {
+
+      var template = '<div class="outgoing-message-container message-container"><p class="username">Alex T.</p><div class="outgoing-bubble bubble">' + msg + '</div>';
+      //$(msg).addClass("outgoing-bubble bubble");
+      $('#messages').append(template);
+    });
+
+    // append text if someone is online
+    socket.on('is_online', function(username) {
+      $('#notifications ul').append($('<li>').html(username));
+    });
+  </script>
+</body>
+</html>

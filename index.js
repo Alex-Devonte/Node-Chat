@@ -1,12 +1,9 @@
-
-
-
 const express = require('express');
 
 const app = express();
+const server = app.listen(process.env.PORT || 8080);
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
-
+const io = require('socket.io').listen(server);
 
 
 app.get('/', function(req, res) {
@@ -38,11 +35,4 @@ io.sockets.on('connection', function(socket) {
   socket.on('disconnect', function() {
     io.emit('is_online', '' + socket.username + ' has left');
   })
-});
-
-
-//Needed for Heroku and local environments
-var port = process.env.PORT || 8080;
-const sever = http.listen( port, function() {
-  console.log('listening on: ' + port);
 });

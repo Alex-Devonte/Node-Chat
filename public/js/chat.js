@@ -1,4 +1,4 @@
-var socket = io.listen(server);
+var socket = io();
 var username = prompt('Type in your username for this session: ');
 var isTypingNotification = $("#is-typing");
 var messageBox = $("#send-message-box");

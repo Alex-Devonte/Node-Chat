@@ -34,6 +34,9 @@ io.sockets.on('connection', function(socket) {
   })
 });
 
-const sever = http.listen(8080, function() {
-  console.log('listening on 8080');
+
+//Needed for Heroku and local environments
+var port = process.env.PORT || 8080;
+const sever = http.listen( port, function() {
+  console.log('listening on: ' + port);
 });
